@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.env
+.venv/
+venv/
+.poetry-cache/
+
+# Node
+node_modules/
+dist/
+
+# Editor
+.idea/
+.vscode/
+.DS_Store
+
+# Alembic
+backend/alembic/versions/*.pyc
+
+# Logs
+*.log
+
+# Coverage
+.coverage
+htmlcov/
