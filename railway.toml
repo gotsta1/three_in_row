@@ -1,0 +1,17 @@
+[project]
+# Основной сервис бекенда (Dockerfile из папки docker/backend.Dockerfile)
+[services.backend]
+source = "backend"
+build = "docker/backend.Dockerfile"
+buildArgs = { APP_DIR = "backend" }
+port = 8000
+env = { PORT = "8000" }
+
+# Переменные окружения задаются в Railway UI или через railway variables.
+# DATABASE_URL нужно взять из managed Postgres Railway, например:
+# postgresql+asyncpg://<user>:<pass>@<host>:<port>/<db>
+
+[services.adminer]
+image = "adminer:4"
+port = 8080
+env = { ADMINER_DEFAULT_SERVER = "db" }
