@@ -56,8 +56,6 @@ def apply_swap(
         snapshots.append(
             Snapshot(board=copy.deepcopy(board), score=score, status=status)
         )
-        if status == "won":
-            break
         matches = find_matches(board)
 
     if status == "active" and not has_possible_move(board):

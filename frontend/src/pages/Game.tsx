@@ -12,6 +12,7 @@ const GamePage: React.FC = () => {
   const [snapshots, setSnapshots] = useState<Snapshot[]>([]);
   const [selectedCell, setSelectedCell] = useState<[number, number] | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
 
   const loadGame = async () => {
     try {
@@ -30,6 +31,7 @@ const GamePage: React.FC = () => {
     if (!id || !selectedCell) return;
     try {
       setError(null);
+      setNotice(null);
       const { data } = await api.post<Snapshot[]>(`/games/${id}/swap`, {
         row: selectedCell[0],
         col: selectedCell[1],
@@ -38,7 +40,11 @@ const GamePage: React.FC = () => {
       setSnapshots(data);
       await loadGame();
     } catch (e: any) {
-      setError(e.response?.data?.detail || 'Swap failed');
+      const detail = e.response?.data?.detail || 'Swap failed';
+      setError(detail);
+      if (detail.toLowerCase().includes('game already')) {
+        setNotice('Игра уже завершена, ходить нельзя.');
+      }
     }
   };
 
@@ -58,11 +64,14 @@ const GamePage: React.FC = () => {
   return (
     <section>
       <h2>Game {game.id}</h2>
+      {game.status === 'won' && <p className="notice success">Поздравляем! Игра выиграна.</p>}
+      {game.status === 'lost' && <p className="notice">Игра завершена по таймауту.</p>}
       <p>
         Difficulty: {game.difficulty} | Score: {game.score}/{game.target_score} | Status: {game.status}
         {game.random_item ? ` | Random item: ${game.random_item}` : ''}
         {game.player ? ` | Player: ${game.player}` : ''}
       </p>
+      {notice && <p className="notice warning">{notice}</p>}
       <Board board={game.board} onCellClick={(r, c) => setSelectedCell([r, c])} />
       <p>Selected: {selectedCell ? `${selectedCell[0]},${selectedCell[1]}` : 'none'}</p>
       <Controls onSwap={doSwap} onReset={resetBoard} />

@@ -9,12 +9,10 @@ interface Props {
 const Controls: React.FC<Props> = ({ onSwap, onReset }) => (
   <div className="controls">
     <div className="direction-controls">
-      <button className="dir-btn" onClick={() => onSwap('up')}>↑ Up</button>
-      <div className="dir-row">
-        <button className="dir-btn" onClick={() => onSwap('left')}>← Left</button>
-        <button className="dir-btn" onClick={() => onSwap('right')}>Right →</button>
-      </div>
-      <button className="dir-btn" onClick={() => onSwap('down')}>↓ Down</button>
+      <button className="dir-btn dir-up" onClick={() => onSwap('up')}>↑ Up</button>
+      <button className="dir-btn dir-left" onClick={() => onSwap('left')}>← Left</button>
+      <button className="dir-btn dir-right" onClick={() => onSwap('right')}>Right →</button>
+      <button className="dir-btn dir-down" onClick={() => onSwap('down')}>↓ Down</button>
     </div>
     <button className="reset" onClick={onReset}>Reset board (-5 pts)</button>
   </div>
