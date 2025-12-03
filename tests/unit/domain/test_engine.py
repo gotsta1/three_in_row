@@ -49,9 +49,27 @@ def test_random_item_scoring_counts_only_target_item():
         ["B", "A", "B"],
         ["C", "C", "A"],
     ]
-    game = _game_state(board, items_count=3, random_item_mode=True, random_item="A", target_score=10)
-    snaps = engine.apply_swap(game, Move(row=0, col=1, direction=Direction.down), game.created_at + dt.timedelta(seconds=1))
-    assert game.score == 3  # only three As removed
+    game = _game_state(
+        board,
+        items_count=3,
+        random_item_mode=True,
+        random_item="A",
+        target_score=10,
+    )
+    import domain.game.gravity as gravity
+
+    original_choice = gravity.random.choice
+    counter = iter(range(1000))
+    gravity.random.choice = lambda _: f"R{next(counter)}"
+    try:
+        snaps = engine.apply_swap(
+            game,
+            Move(row=0, col=1, direction=Direction.down),
+            game.created_at + dt.timedelta(seconds=1),
+        )
+    finally:
+        gravity.random.choice = original_choice
+    assert game.score == 3
     assert snaps and snaps[0].score == 3
 
 
