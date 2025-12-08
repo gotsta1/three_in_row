@@ -23,6 +23,13 @@ const CreateGame: React.FC = () => {
         setError('Items count must be between 2 and 100');
         return;
       }
+      if (
+        difficulty === 'custom' &&
+        (customRows < 3 || customCols < 3)
+      ) {
+        setError('Минимальный размер поля — 3x3');
+        return;
+      }
       const payload: any = { difficulty, player: player.trim() };
       if (difficulty === 'custom') {
         payload.custom = {
